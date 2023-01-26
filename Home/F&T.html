@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ <title>Table with Edit and Delete Options</title>
+ <script src="v&t.js"></script>
+ <link rel="stylesheet" href="style.css">
+</head>
+<form>
+ First Name: <input type="text" id="firstName" onblur="validateFirstName()"><br>
+ <span id="firstNameError" style="color:red"></span><br>
+ Last Name: <input type="text" id="lastName" onblur="validateLastName()"><br>
+ <span id="lastNameError" style="color:red"></span><br>
+ Age: <input type="number" id="age" onblur="validateAge()"><br>
+ <span id="ageError" style="color:red"></span><br>
+ <input type="button" value="Validate" onclick="validateForm()">
+ <input type="submit" value="Submit" onclick="validateForm() , storeData()">
+</form>
+<table id="dataTable"></table>
+<input type="button" value="Display Data" onclick="displayData()">
+
+<body>
