@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>Form with Local Storage and Table</title>
+
+  <style>
+
+    .error {
+
+      color: red;
+
+    }
+
+  </style>
+
+  <script>
+
+    function storeData() {
+
+      var firstName = document.getElementById("firstName").value;
+
+      var lastName = document.getElementById("lastName").value;
+
+      var age = document.getElementById("age").value;
+
+      
+
+      var firstNameError = document.getElementById("firstNameError");
+
+      var lastNameError = document.getElementById("lastNameError");
+
+      var ageError = document.getElementById("ageError");
+
+      firstNameError.innerHTML = "";
+
+      lastNameError.innerHTML = "";
+
+      ageError.innerHTML = "";
+
+      
+
+      if(firstName === "") {
+
+        firstNameError.innerHTML = "Please enter first name";
+
+        return;
+
+      }
+
+      if(lastName === "") {
+
+        lastNameError.innerHTML = "Please enter last name";
+
+        return;
+
+      }
+
+      if(age === "" || isNaN(age) || age < 0) {
+
+        ageError.innerHTML = "Please enter a valid age";
+
+        return;
+
+      }
+
+      var data = {
+
+        firstName: firstName,
+
+        lastName: lastName,
+
+        age: age
+
+      }
+
+      var dataList = localStorage.getItem("dataList") ? JSON.parse(localStorage.getItem("dataList")) : [];
+
+      dataList.push(data);
+
+      localStorage.setItem("dataList", JSON.stringify(dataList));
+
+      displayData();
+
+    }
+
+    function displayData() {
+
+      var dataList = localStorage.getItem("dataList") ? JSON.parse(localStorage.getItem("dataList")) : [];
+
+      var dataTable = document.getElementById("dataTable");
+
+      dataTable.innerHTML = "<tr><th>First Name</th><th>Last Name</th><th>Age</th><th>Edit</th><th>Delete</th></tr>";
+
+      for(var i = 0; i < dataList.length; i++) {
+
+        var data = dataList[i];
+
+        var row = dataTable.insertRow();
+
+        var firstNameCell = row.insertCell(0);
+
+        var lastNameCell = row.insertCell(1);
+
+        var ageCell = row.insertCell(2);
+
+        var editCell = row.insertCell(3);
+
+        var deleteCell = row.insertCell(4);
+
+        firstNameCell.innerHTML = data.firstName;
+
+        lastNameCell.innerHTML = data.lastName;
+
+        ageCell.innerHTML = data.age;
+
+        editCell.innerHTML = "<button onclick='editData(" + i + ")'>Edit</button>";
+
+        deleteCell.innerHTML = "<button onclick='deleteData(" + i + ")'>Delete</button>";
+
+      }
+
+    }
+
+    function editData(index) {
+
+      var dataList = JSON.parse(localStorage.getItem("dataList"));
+
+      var data = dataList[index];
+
+      document.getElementById("firstName").value = data.firstName;
+
+      document.getElementById("lastName").value = data.lastName;
+
+      document.getElementById("age").value = data.age;
+
+      localStorage.setItem("editIndex", index);
+
+    }
+
+    function updateData() {
+
+      var firstName = document.getElementById("firstName").value;
+
+      var lastName = document.getElementById("lastName").value;
+
+      var age = document.getElementById("age").value;
+
+      
+
+      var firstNameError = document.getElementById("firstNameError");
+
+      var lastNameError = document.getElementById("lastNameError");
+
+      var ageError = document.getElementById("ageError");
+
+      firstNameError.innerHTML = "";
+
+      lastNameError.innerHTML = "";
+
+      ageError.innerHTML = "";
+
+      
+
+      if(firstName === "") {
+
+        firstNameError.innerHTML = "Please enter first name";
+
+        return;
+
+      }
+
+      if(lastName === "") {
+
+        lastNameError.innerHTML = "Please enter last name";
+
+        return;
+
+      }
+
+      if(age === "" || isNaN(age) || age < 0) {
+
+        ageError.innerHTML = "Please enter a valid age";
+
+        return;
+
+      }
+
+      var data = {
+
+        firstName: firstName,
+
+        lastName: lastName,
+
+        age: age
+
+      }
+
+      var editIndex = localStorage.getItem("editIndex");
+
+      var dataList = JSON.parse(localStorage.getItem("dataList"));
+
+      dataList[editIndex] = data;
+
+      localStorage.setItem("dataList", JSON.stringify(dataList));
+
+      displayData();
+
+      document.getElementById("firstName").value = "";
+
+      document.getElementById("lastName").value = "";
+
+      document.getElementById("age").value = "";
+
+    }
+
+    function deleteData(index) {
+
+      var dataList = JSON.parse(localStorage.getItem("dataList"));
+
+      dataList.splice(index, 1);
+
+      localStorage.setItem("dataList", JSON.stringify(dataList));
+
+      displayData();
+
+    }
+
+  </script>
+
+</head>
+
+<body onload="displayData()">
+
+  <form>
+
+    <label for="firstName">First Name:</label>
+
+    <input type="text" id="firstName" name="firstName">
+
+    <span class="error" id="firstNameError"></span>
+
+    <br>
+
+    <label for="lastName">Last Name:</label>
+
+    <input type="text" id="lastName" name="lastName">
+
+    <span class="error" id="lastNameError"></span>
+
+    <br>
+
+    <label for="age">Age:</label>
+
+    <input type="text" id="age" name="age">
+
+    <span class="error" id="ageError"></span>
+
+    <br>
+
+    <br>
+
+    <input type="button" value="Submit" onclick="submitData()">
+
+    <input type="button" value="Update" onclick="updateData()">
+
+  </form>
+
+  <table id="dataTable">
+
+    <tr>
+
+      <th>First Name</th>
+
+      <th>Last Name</th>
+
+      <th>Age</th>
+
+      <th>Edit</th>
+
+      <th>Delete</th>
+
+    </tr>
+
+  </table>
+
+</body>
+
+</html>
+
+
+
